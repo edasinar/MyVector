@@ -3,19 +3,20 @@
 template <class T>
 class MyVector
 {
-	friend std::ostream& operator<<(std::ostream out, MyVector& vect);
+	friend std::ostream& operator<<(std::ostream out, const MyVector& vect);
 	//friend std::istream& operator>>(std::istream in, MyVector& vect);
 
 public:
 	MyVector(); // default constuctor
-	MyVector(T& vect, int size);
+	MyVector(const T& vect, const int size);
+	MyVector(int size);
 
-	MyVector(MyVector&); // copy constuctor
+	MyVector(const MyVector&); // copy constuctor
 	MyVector& operator=(MyVector&); //copy assignment operator
 
 	~MyVector(); // destructor
 
-	MyVector(MyVector&&); // move constructor
+	MyVector(const MyVector&&); // move constructor
 	MyVector& operator=(MyVector&&); // move assignment operator
 
 	bool operator!(); // boþ mu dolu mu kontrol eder
@@ -40,3 +41,39 @@ private:
 	T* vect;
 	int size;
 };
+
+template<class T>
+inline MyVector<T>::MyVector()
+{
+	size = 0;
+}
+
+template<class T>
+MyVector<T>::MyVector(T& vect, const int size)
+{
+	if (size < 0)
+		throw std::invalid_argument("index must be bigger than 0");
+	
+	else if (size == 0)
+		MyVector();
+	
+	else if (size == 1)
+	{
+		this->vect = new T[2];
+		this->size = size;
+		this->vect[0] = vect;
+		this->vect[1] = '\0';
+	}
+	
+	else if (size > 1)
+	{
+
+	}
+}
+
+template<class T>
+inline MyVector<T>::MyVector(int size)
+{
+}
+
+
