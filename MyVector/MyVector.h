@@ -17,8 +17,8 @@ class MyVector
 	}
 
 public:
-	MyVector(); // default constuctor
-	MyVector(const T* vect, const int size);
+	MyVector() = default; // default constuctor
+	MyVector(T& vect, const int size);
 	MyVector(int size);
 
 	MyVector(const MyVector&); // copy constuctor
@@ -40,12 +40,13 @@ public:
 	int getSize() const; // boyutu döndürür
 
 	MyVector& sort(MyVector&); // vektörü sýralar
-	MyVector& push_back(const MyVector&, T a); // vektörün sonuna ekler
-	MyVector& push_up(MyVector&, T a); // vektörün baþýna ekler
+	MyVector& push_back(T a); // vektörün sonuna ekler
+	MyVector& push_up(T a); // vektörün baþýna ekler
 
 	T& random_select(MyVector&); // vektörde random bir indis seçer
-	T& at(MyVector&, T a, int index); // istenilen indise ekler
+	//T& at(MyVector&, T a, int index); // istenilen indise ekler
 	
+	void print();
 
 private:
 	T* vect;
@@ -53,13 +54,7 @@ private:
 };
 
 template<class T>
-inline MyVector<T>::MyVector()
-{
-	size = 0;
-}
-
-template<class T>
-MyVector<T>::MyVector(const T* vect, const int size)
+MyVector<T>::MyVector(T& vect, const int size)
 {
 	if (size < 0)
 		throw std::invalid_argument("index must be bigger than 0");
@@ -90,8 +85,6 @@ inline MyVector<T>::MyVector(int size)
 {
 	if (size < 0)
 		throw std::invalid_argument("index must be bigger than 0");
-	else if (size == 0)
-		MyVector();
 	else if (size == 1)
 	{
 		vect = new T;
@@ -210,59 +203,59 @@ template<class T>
  }
 
  template<class T>
- inline MyVector<T>& MyVector<T>::push_back(const MyVector& other, T a)
+ inline MyVector<T>& MyVector<T>::push_back(T a)
  {
-	 int temp_size = other.size + 1;
+	 int temp_size = size + 1;
 	
 	 T* temp = new T[temp_size];
 	
-	 for (auto i = 0; i < other.size; ++i)
+	 for (auto i = 0; i < size; ++i)
 	 {
-		 temp[i] = other.vect[i];
+		 temp[i] = vect[i];
 	 }
 	
-	 if (other.size == 1)
-		 delete other.vect;
-	 else if (other.size > 1)
-		 delete[] other.size;
+	 if (size == 1)
+		 delete vect;
+	 else if (size > 1)
+		 delete[] vect;
 
 	 temp[temp_size] = a;
 
-	other.vect = new T[temp_size];
+	vect = new T[temp_size];
 	 
 	for (auto i = 0; i < temp_size; ++i)
 	 {
-		 other.vect[i] = temp[i];
+		 vect[i] = temp[i];
 	 }
-	other.size = temp_size;
+	size = temp_size;
 	 return *this;
  }
 
  template<class T>
- inline MyVector<T>& MyVector<T>::push_up(MyVector& other, T a)
+ inline MyVector<T>& MyVector<T>::push_up(T a)
  {
-	 int temp_size = other.size + 1;
+	 int temp_size = size + 1;
 	
-	 T* temp = new T[other.size];
+	 T* temp = new T[size];
 	
-	 for (auto i = 0; i < other.size; ++i)
-		 temp[i] = other.vect[i]; 
+	 for (auto i = 0; i < size; ++i)
+		 temp[i] = vect[i]; 
 
-	 if (other.size == 1)
-		 delete other.vect;
-	 else if (other.size > 1)
-		 delete[] other.size;
+	 if (size == 1)
+		 delete vect;
+	 else if (size > 1)
+		 delete[] vect;
 
-	 other.vect = new T[temp_size];
+	 vect = new T[temp_size];
 
-	 other.vect[0] = a;
+	 vect[0] = a;
 
 	
 	 for (auto i = 1; i <= temp_size; ++i)
 	 {
-		 other.vect[i] = temp[i - 1];
+		 vect[i] = temp[i - 1];
 	 }
-	 other.size = temp_size;
+	 size = temp_size;
 	 return *this;
  }
 
@@ -279,7 +272,7 @@ template<class T>
 	 return other.vect[temp];
  }
 
- template<class T>
+ /*template<class T>
  inline T& MyVector<T>::at(MyVector& other, T a, int index)
  {
 	 int temp_size = other.size + 1;
@@ -294,7 +287,7 @@ template<class T>
 	 else if (other.size > 1)
 		 delete[] other.vect;
 
-	 other.size = new T[temp_size];
+	 other.vect = new T[temp_size];
 	 for (auto i = 0; i < index; ++i)
 		 other.vect[i] = temp[i];
 
@@ -302,5 +295,15 @@ template<class T>
 
 	 for (auto j = index + 1; j < temp_size; ++j)
 		 other.vect[j] = temp[j - 1];
+	
+	 return *this;
+ }*/
 
+ template<class T>
+ inline void MyVector<T>::print()
+ {
+	 for (auto i = 0; i < size; ++i)
+		 std::cout << vect[i] << " ";
+
+	 std::cout << std::endl;
  }
